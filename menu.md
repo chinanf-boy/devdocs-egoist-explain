@@ -23,28 +23,37 @@ const { configDir, toggleGlobalShortcut } = require('./utils')
 const config = require('./config')
 const pkg = require('./package')
 
-function sendAction(action, ...args) {
+function sendAction(action, ...args) { // 每个动作 给 窗口发送 信息
   const [win] = BrowserWindow.getAllWindows()
 
   if (process.platform === 'darwin') {
-    win.restore()
+    // 将窗口从最小化状态恢复到以前的状态。
+    win.restore() 
   }
 
   win.webContents.send(action, ...args)
 }
 
 function updateMenu(opts) {
+  // 设置应用菜单
   Menu.setApplicationMenu(createMenu(opts))
 }
 
+```
+
+### 创建菜单
+
+``` js
+
 function createMenu(opts) {
-  const toggleAppAccelerator =
-    config.get('shortcut.toggleApp') || 'CmdOrCtrl+Shift+D'
+  const toggleAppAccelerator = config.get('shortcut.toggleApp') || 'CmdOrCtrl+Shift+D'
   const toggleAppAcceleratorRegistered = globalShortcut.isRegistered(
     toggleAppAccelerator
   )
 
 ```
+
+- [在主进程中创建程序菜单的简单API模版示例](https://electronjs.org/docs/api/menu#%E7%A4%BA%E4%BE%8B)
 
 ### 偏爱
 
@@ -65,7 +74,7 @@ function createMenu(opts) {
             shell.openItem(configDir('custom.js'))
           }
         },
-        {
+        { // 是否使用 全局快捷键
           label: `${
             toggleAppAcceleratorRegistered ? 'Disable' : 'Enable'
           } Global Shortcut`,
@@ -90,6 +99,8 @@ function createMenu(opts) {
 
 ###  checkForUpdates
 
+检查更新
+
 ``` js
   const checkForUpdates = {
     label: 'Check for Updates',
@@ -100,7 +111,7 @@ function createMenu(opts) {
         'https://api.github.com/repos/egoist/devdocs-desktop/releases/latest'
       const latest = await axios.get(api).then(res => res.data)
 
-      if (semverCompare(latest.tag_name.slice(1), pkg.version) === 1) {
+      if (semverCompare(latest.tag_name.slice(1), pkg.version) === 1) { // 比较版本
         dialog.showMessageBox(
           focusedWindow,
           {
@@ -112,15 +123,16 @@ function createMenu(opts) {
             buttons: ['OK', 'Cancel'],
             defaultId: 0
           },
-          selected => {
+          selected => { // 默认 ok
             if (selected === 0) {
+              // 在用户的默认浏览器中打开 URL 的示例:
               shell.openExternal(
                 'https://github.com/egoist/devdocs-desktop/releases/latest'
               )
             }
           }
         )
-      } else {
+      } else { // 没有更新
         dialog.showMessageBox(focusedWindow, {
           message: 'No updates!',
           detail: `v${pkg.version} is already the latest version.`
@@ -132,6 +144,8 @@ function createMenu(opts) {
 ```
 
 ### 编辑
+
+若要将菜单项的操作设置为标准操作, 应设置菜单项的 `role` 属性
 
 ``` js
   const template = [
