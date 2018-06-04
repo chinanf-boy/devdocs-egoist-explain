@@ -293,19 +293,19 @@ app.on('ready', () => {
 
 ```
 
-- [toggleGlobalShortcut](./util.md)
+- [x] [toggleGlobalShortcut](./util.md)
 
-
+添加或删除全局快捷键
 
 - [createMenu](./menu.md)
 
 应用菜单列表
 
-- [updater](./updater.md)
+- [x] [updater](./updater.md)
 
 自动更新触发
 
-- [tray](./tray.md)
+- [x] [tray](./tray.md)
 
 系统菜单程序列表的图标
 
