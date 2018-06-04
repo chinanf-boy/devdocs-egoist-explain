@@ -20,8 +20,18 @@ Explanation
 <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="30"></a> 
 ---
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [package.json](#packagejson)
+  - [1.  `postinstall`](#1--postinstall)
+  - [2.  electron-builder](#2--electron-builder)
+  - [3.  `build`](#3--build)
+- [app/index.js](#appindexjs)
+  - [electron-控制-方式](#electron-%E6%8E%A7%E5%88%B6-%E6%96%B9%E5%BC%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
@@ -100,7 +110,7 @@ Explanation
 
 既然是 `electron` 应用
 
-就有必要说明一下, electron 控制网页 的 方式
+就有必要说明一下, [electron 控制网页 的 方式](./electron.md)
 
-
+###
 
