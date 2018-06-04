@@ -1,5 +1,12 @@
 ## electron
 
+---
+
+<!-- START doctoc -->
+<!-- END doctoc -->
+
+---
+
 简要说明
 
 1. electron 有个`主进程`
@@ -55,7 +62,8 @@ const path = require('path')
 <script>
 const fs = require('fs')
 const path = require('path')
-
+// 当然 同一目录下 
+const m = require('./main')
 // 可以使用
 </script>
 ```

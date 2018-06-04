@@ -2,6 +2,9 @@
 
 添加, 系统菜单的图标和应用图片, 主要是 `windows`/`linux`
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ``` js
 const path = require('path')
 const { app, Menu, Tray } = require('electron')

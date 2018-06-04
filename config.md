@@ -3,6 +3,8 @@
 
 每次操作都是一次 文件级别的 存储, 应用退出也不会变
 
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ``` js
 const Config = require('electron-store')

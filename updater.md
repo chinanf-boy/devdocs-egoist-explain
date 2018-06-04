@@ -1,5 +1,7 @@
 ## updater
 
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ``` js
 const isDev = require('electron-is-dev')
