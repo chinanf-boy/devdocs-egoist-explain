@@ -1,8 +1,14 @@
 ## util
 
 ---
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+---
+
+- [configDir](#configdir)
+- [toggleGlobalShortcut](#toggleglobalshortcut)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ---
 ### configDir
 

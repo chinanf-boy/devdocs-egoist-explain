@@ -18,6 +18,7 @@ Explanation
 
 <a href="https://patreon.com/yobrave">
 <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="30"></a> 
+
 ---
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -30,6 +31,19 @@ Explanation
   - [3.  `build`](#3--build)
 - [app/index.js](#appindexjs)
   - [electron-控制-方式](#electron-%E6%8E%A7%E5%88%B6-%E6%96%B9%E5%BC%8F)
+  - [require](#require)
+  - [应用信息](#%E5%BA%94%E7%94%A8%E4%BF%A1%E6%81%AF)
+  - [唯一应用](#%E5%94%AF%E4%B8%80%E5%BA%94%E7%94%A8)
+  - [关闭和显示](#%E5%85%B3%E9%97%AD%E5%92%8C%E6%98%BE%E7%A4%BA)
+  - [主窗口](#%E4%B8%BB%E7%AA%97%E5%8F%A3)
+    - [renderer/index.html](#rendererindexhtml)
+  - [login](#login)
+  - [ready](#ready)
+  - [激活](#%E6%BF%80%E6%B4%BB)
+  - [获得焦点](#%E8%8E%B7%E5%BE%97%E7%84%A6%E7%82%B9)
+  - [退出前](#%E9%80%80%E5%87%BA%E5%89%8D)
+  - [自定义协议](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8D%8F%E8%AE%AE)
+  - [基本启动](#%E5%9F%BA%E6%9C%AC%E5%90%AF%E5%8A%A8)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -228,9 +242,11 @@ function createMainWindow() { // 创建主窗口
 
 ```
 
-- [BrowserWindow 参数](https://electronjs.org/docs/api/browser-window#new-browserwindowoptions)
+#### renderer/index.html
 
----
+- [index.html](renderer.md)
+
+- [BrowserWindow 参数](https://electronjs.org/docs/api/browser-window#new-browserwindowoptions)
 
 ### login
 
@@ -245,10 +261,9 @@ app.on('login', (event, webContents, request, authInfo, cb) => {
 
 ```
 
-- [login](./login.md)
+- [x] [login](./login.md)
 
-
----
+并没有怎么用到
 
 ### ready
 
@@ -298,7 +313,7 @@ app.on('ready', () => {
 
 添加或删除全局快捷键
 
-- [createMenu](./menu.md)
+- [x] [createMenu](./menu.md)
 
 应用菜单列表
 

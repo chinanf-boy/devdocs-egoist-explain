@@ -4,8 +4,21 @@
 
 除了, 触发函数, 每个的配置其实差不多
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [创建菜单](#%E5%88%9B%E5%BB%BA%E8%8F%9C%E5%8D%95)
+- [偏爱](#%E5%81%8F%E7%88%B1)
+- [checkForUpdates](#checkforupdates)
+- [编辑](#%E7%BC%96%E8%BE%91)
+- [视图](#%E8%A7%86%E5%9B%BE)
+- [窗口](#%E7%AA%97%E5%8F%A3)
+- [编辑-朗读](#%E7%BC%96%E8%BE%91-%E6%9C%97%E8%AF%BB)
+- [窗口-快捷键](#%E7%AA%97%E5%8F%A3-%E5%BF%AB%E6%8D%B7%E9%94%AE)
+- [帮助](#%E5%B8%AE%E5%8A%A9)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 

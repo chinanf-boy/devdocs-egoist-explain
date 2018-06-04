@@ -2,12 +2,18 @@
 
 ---
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [简要说明](#%E7%AE%80%E8%A6%81%E8%AF%B4%E6%98%8E)
+- [页面进程](#%E9%A1%B5%E9%9D%A2%E8%BF%9B%E7%A8%8B)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
-简要说明
+### 简要说明
 
 1. electron 有个`主进程`
 
