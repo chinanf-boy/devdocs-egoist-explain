@@ -132,8 +132,9 @@ require('electron-context-menu')({ // 菜单
 
 ```
 
-- [config](./config.md)
+- [x] [config](./config.md)
 
+每次操作都是一次 文件级别的 存储, 应用退出也不会变
 
 ### 应用信息
 
