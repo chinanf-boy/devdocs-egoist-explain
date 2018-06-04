@@ -4,11 +4,27 @@
 
 1. electron 有个`主进程`
 
+``` js
+const { app, BrowserWindow } = require('electron')
+```
+
 2. 所有你看到的`页面进程「渲染进程」`都是通过 `主进程` 生产的
+
+``` js
+new BrowserWindow
+```
 
 3. 页面进程之间, 不能直接通信, 需要借助 主进程`ipc`
 
-页面进程
+- 主进程使用`ipcMain` - [ipcMain doc](https://electronjs.org/docs/api/ipc-main#%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF)
+
+- 页面进程使用`ipcRenderer` - [ipcRenderer doc](https://electronjs.org/docs/api/ipc-renderer#ipcrenderer)
+
+
+> 使用方式就是 监听`on("name",function)`, 发送`send("name",value)`
+
+
+### 页面进程
 
 1. 如需请求本机代码「`js`」, 需要通过 electron 库中的 `remote`
 
@@ -22,6 +38,7 @@ const js = require('electron').remote.require("./local.js")
 > 当然 `local.js` 也要导出才行
 
 ``` js
+// local.js
 exports {something}
 ```
 

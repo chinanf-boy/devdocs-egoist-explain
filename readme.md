@@ -112,5 +112,284 @@ Explanation
 
 就有必要说明一下, [electron 控制网页 的 方式](./electron.md)
 
-###
+### require
 
+``` js
+const path = require('path')
+const { app, BrowserWindow, Menu } = require('electron')
+const debug = require('debug')('devdocs-desktop:index')
+const createMenu = require('./menu')
+const config = require('./config')
+const tray = require('./tray')
+const updater = require('./updater')
+const { toggleGlobalShortcut } = require('./utils')
+const login = require('./login')
+
+require('electron-debug')() // 专用 调试信息
+require('electron-context-menu')({ // 菜单
+  showInspectElement: true // 能右键 点出 dev调试器
+})
+
+```
+
+- [config](./config.md)
+
+
+### 应用信息
+
+``` js
+//改变当前应用
+app.setAppUserModelId('com.egoistian.devdocs')
+
+let mainWindow
+let isQuitting = false
+let urlToOpen
+
+```
+
+### 唯一应用
+
+``` js
+// https://electronjs.org/docs/api/app#appmakesingleinstancecallback
+const isAlreadyRunning = app.makeSingleInstance(() => {
+  // 这将确保只有一个应用程序的实例正在运行, 其余的实例全部会被终止并退出。
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+
+    mainWindow.show()
+  }
+})
+
+if (isAlreadyRunning) {
+  // 已经有了 , 退出
+  app.quit()
+}
+
+```
+
+### 关闭和显示
+
+``` js
+function toggleWindow() { // 关闭和显示 主窗口
+  if (mainWindow.isVisible()) {
+    mainWindow.hide()
+  } else {
+    mainWindow.show()
+  }
+}
+
+```
+
+### 主窗口
+
+``` js
+function createMainWindow() { // 创建主窗口
+  const lastWindowState = config.get('lastWindowState')
+
+  const win = new BrowserWindow({
+    title: app.getName(),
+    x: lastWindowState.x, // 开启的位置
+    y: lastWindowState.y,
+    width: lastWindowState.width, // 窗口大小
+    height: lastWindowState.height,
+    minWidth: 600,
+    minHeight: 400,
+    show: false, // 最初的可见性状态将为visible 尽管窗口实际上是隐藏的。
+    titleBarStyle: 'hidden', // 窗口标题栏的样式
+    backgroundColor: '#ffffff'
+  })
+
+  if (process.platform === 'darwin') { // 如果是 macOS 系统
+    win.setSheetOffset(24)
+  }
+
+  const url = `file://${path.join(__dirname, 'renderer', 'index.html')}`
+
+  win.loadURL(url) // 加载 web页面
+
+  win.on('close', e => {
+    if (!isQuitting) {
+      e.preventDefault()
+
+      if (process.platform === 'darwin') {
+        // 一般 在 macos 中 需要 Command + Q 才能完全退出程序
+        app.hide()
+      } else {
+        win.hide()
+      }
+    }
+  })
+
+  return win
+}
+
+```
+
+- [BrowserWindow 参数](https://electronjs.org/docs/api/browser-window#new-browserwindowoptions)
+
+---
+
+### login
+
+登录信息
+
+``` js
+app.on('login', (event, webContents, request, authInfo, cb) => {
+  debug('app.on(login)')
+  event.preventDefault()
+  login(cb)
+})
+
+```
+
+- [login](./login.md)
+
+
+---
+
+### ready
+
+应用准备好就, 开启
+
+``` js
+app.on('ready', () => {
+  
+  // 快捷键
+  const shortcut = config.get('shortcut')
+  for (const name in shortcut) {
+    const accelerator = shortcut[name]
+    if (accelerator) {
+      toggleGlobalShortcut({
+        name,
+        accelerator,
+        registered: false,
+        action: toggleWindow
+      })
+    }
+  }
+
+    // 菜单
+  Menu.setApplicationMenu(
+    createMenu({
+      toggleWindow
+    })
+  )
+  // 主窗口
+  mainWindow = createMainWindow()
+  // 将图标和上下文菜单添加到系统的通知区域。
+  tray.create(mainWindow)
+
+// 加载页面时，ready-to-show如果窗口尚未显示，则渲染器进程首次渲染页面时会发出事件
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+    updater.init() // 更新初始化
+    if (urlToOpen) {
+      mainWindow.webContents.send('link', urlToOpen)
+    }
+  })
+})
+
+```
+
+- [toggleGlobalShortcut](./util.md)
+
+
+
+- [createMenu](./menu.md)
+
+应用菜单列表
+
+- [updater](./updater.md)
+
+自动更新触发
+
+- [tray](./tray.md)
+
+系统菜单程序列表的图标
+
+- [ready-to-show](https://electronjs.org/docs/api/browser-window#using-ready-to-show-event)
+
+- [webContents.send](https://electronjs.org/docs/api/web-contents#contentssendchannel-arg1-arg2-)
+
+除了`ipcMain` 之外, 为了有目的性的发送, 窗口实例也是具有向 `页面进程` 发送信息的能力
+
+### 激活
+
+``` js
+// 应用程序激活时
+app.on('activate', () => {
+  mainWindow.show()
+})
+
+```
+
+### 获得焦点
+
+``` js
+let hasOpenedOnce
+// 在 browserWindow 获得焦点时发出。
+app.on('browser-window-focus', () => {
+  if (hasOpenedOnce) {
+    mainWindow.webContents.send('focus-webview')
+  } else {
+    hasOpenedOnce = true
+  }
+})
+
+```
+
+### 退出前
+
+``` js
+// 退出前
+app.on('before-quit', () => {
+  isQuitting = true
+
+  if (!mainWindow.isFullScreen()) { // 只要不是全屏,就保存位置
+   // 因为是 elertron-store 库, 所以其实是保存下来的
+    config.set('lastWindowState', mainWindow.getBounds())
+  }
+})
+
+```
+
+### 自定义协议
+
+``` js
+// devdocs://
+// 应用内部都是已 这个链接开头
+app.setAsDefaultProtocolClient('devdocs')
+```
+
+### 基本启动
+
+应用程序完成基本启动时发出
+
+``` js
+app.on('will-finish-launching', () => {
+  //当用户想要在应用中打开一个 URL 时发出
+  app.on('open-url', (e, url) => {
+    // 1. 第一次 应用还没有准备好的时候, 窗口没有生成
+    if (mainWindow) {
+      // 3. 有了, 就请求
+      mainWindow.webContents.send('link', url)
+    } else {
+      // 2. 先保存
+      urlToOpen = url
+    }
+  })
+})
+
+```
+
+> 您通常会在此处设置侦听器`open-file`和 `open-url`事件
+
+- [will-finish-launching](https://electronjs.org/docs/api/app#event-will-finish-launching)
+
+- [open-url](https://electronjs.org/docs/api/app#%E4%BA%8B%E4%BB%B6-open-url-macos)
+
+- [webContents.send](https://electronjs.org/docs/api/web-contents#contentssendchannel-arg1-arg2-)
+
+除了`ipcMain` 之外, 为了有目的性的发送, 窗口实例也是具有向 `页面进程` 发送信息的能力
